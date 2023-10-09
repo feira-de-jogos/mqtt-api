@@ -8,13 +8,8 @@ const app = express();
 const router = promiseRouter();
 
 // Configuração da conexão com o banco de dados
-const pool = new Pool({
-  user: "postgres",
-  password: "1308",
-  host: "127.0.0.1",
-  port: 5433,
-  database: "feira"
-});
+const pool = new Pool(
+ );
 
 var email = "leojn132013@gmail.com";
 var senha = "senhaadm";
