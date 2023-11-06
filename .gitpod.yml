@@ -1,7 +1,6 @@
 tasks:
   - name: servidor
     init: npm install --include-dev
-    command: node servidor.js
 
 vscode:
   extensions:
