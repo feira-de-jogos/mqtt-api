@@ -9,6 +9,7 @@
   "name": "feira-de-jogos-nuvem-mqtt",
   "version": "0.1.0",
   "dependencies": {
-    "mqtt": "^5.1.4"
+    "mqtt": "^5.1.4",
+    "pg": "^8.11.3"
   }
 }
