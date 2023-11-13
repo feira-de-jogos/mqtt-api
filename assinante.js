@@ -1,3 +1,4 @@
+require('dotenv').config()
 const mqtt = require('mqtt')
 const mqttURI = process.env.MQTT_URI || 'mqtt://localhost'
 const cliente = mqtt.connect(mqttURI, { protocolVersion: 5 })
