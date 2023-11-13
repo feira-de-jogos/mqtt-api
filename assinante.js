@@ -61,8 +61,13 @@ cliente.on('message', async (topico, mensagem) => {
       return
     }
 
-    await pool.query('INSERT INTO despesas (jogador_id, produto_id, valor, data) VALUES ($1, $2, $3, NOW())', [id, produto, valor])
-    await pool.query('UPDATE estoque SET quantidade = quantidade - 1 WHERE produto_id = $1;', [produto])
+    try {
+      await pool.query('INSERT INTO despesas (jogador_id, produto_id, valor, data) VALUES ($1, $2, $3, NOW())', [id, produto, valor])
+      await pool.query('UPDATE estoque SET quantidade = quantidade - 1 WHERE produto_id = $1;', [produto])
+    } catch (error) {
+      cliente.publish(topico, '500', { qos: 2 })
+      return
+    }
     cliente.publish(topico, '200', { qos: 2 })
   } else if (operação === 'estoque') {
     let maquina, senha, produto, quantidade
