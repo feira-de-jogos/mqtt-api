@@ -25,14 +25,13 @@ cliente.on('message', async (topico, mensagem) => {
 
   mensagem = mensagem.toString()
   if (operação === 'debito') {
-    let id, senha, maquina, produto, valor
+    let id, senha, maquina, produto
     try {
-      if (mensagem.length !== 20) throw new Error()
+      if (mensagem.length !== 16) throw new Error()
       id = parseInt(mensagem.substring(0, 4))
       senha = parseInt(mensagem.substring(4, 8))
       maquina = parseInt(mensagem.substring(8, 12))
       produto = parseInt(mensagem.substring(12, 16))
-      valor = parseInt(mensagem.substring(16, 20))
     } catch (error) {
       cliente.publish(topico, '400', { qos: 2 })
       return
@@ -50,11 +49,12 @@ cliente.on('message', async (topico, mensagem) => {
     let despesas = await pool.query('SELECT COALESCE(SUM(valor), 0) FROM despesas WHERE jogador_id = $1', [id])
     despesas = parseInt(despesas.rows[0].sum)
 
-    const produtos = await pool.query('SELECT id FROM produtos WHERE id = $1 AND EXISTS (SELECT 1 FROM estoque WHERE maquina_id = $2 AND produto_id = produtos.id AND quantidade > 0);', [produto, maquina])
+    const produtos = await pool.query('SELECT id, valor FROM produtos WHERE id = $1 AND EXISTS (SELECT 1 FROM estoque WHERE maquina_id = $2 AND produto_id = produtos.id AND quantidade > 0);', [produto, maquina])
     if (produtos.rowCount === 0) {
       cliente.publish(topico, '403', { qos: 2 })
       return
     }
+    const valor = produtos.rows[0].valor
 
     if ((receitas - despesas) < valor) {
       cliente.publish(topico, '403', { qos: 2 })
