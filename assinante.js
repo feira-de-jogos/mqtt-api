@@ -45,9 +45,11 @@ cliente.on('message', async (topico, mensagem) => {
 
     let receitas = await pool.query('SELECT COALESCE(SUM(valor), 0) FROM receitas WHERE jogador_id = $1', [id])
     receitas = parseInt(receitas.rows[0].sum)
+    if (isNaN(receitas)) { receitas = 0 }
 
     let despesas = await pool.query('SELECT COALESCE(SUM(valor), 0) FROM despesas WHERE jogador_id = $1', [id])
     despesas = parseInt(despesas.rows[0].sum)
+    if (isNaN(despesas)) { despesas = 0 }
 
     const produtos = await pool.query('SELECT id, valor FROM produtos WHERE id = $1 AND EXISTS (SELECT 1 FROM estoque WHERE maquina_id = $2 AND produto_id = produtos.id AND quantidade > 0);', [produto, maquina])
     if (produtos.rowCount === 0) {
@@ -57,7 +59,7 @@ cliente.on('message', async (topico, mensagem) => {
     const valor = produtos.rows[0].valor
 
     if ((receitas - despesas) < valor) {
-      cliente.publish(topico, '403', { qos: 2 })
+      cliente.publish(topico, '402', { qos: 2 })
       return
     }
 
