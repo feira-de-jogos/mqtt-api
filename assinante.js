@@ -1,6 +1,6 @@
 require('dotenv').config()
 const mqtt = require('mqtt')
-const mqttURI = process.env.MQTT_URI || 'mqtt://localhost'
+const mqttURI = process.env.MQTT_URI || 'mqtt://[::1]'
 const cliente = mqtt.connect(mqttURI, { protocolVersion: 5 })
 const topicos = process.env.MQTT_TOPIC || ['debito/+', 'estoque/+']
 const { Pool } = require('pg')
