@@ -43,11 +43,11 @@ cliente.on('message', async (topico, mensagem) => {
       return
     }
 
-    let receitas = await pool.query('SELECT COALESCE(SUM(valor), 0) FROM receitas WHERE jogador_id = $1', [id])
+    let receitas = await pool.query('SELECT COALESCE(SUM(valor), 0) as sum FROM receitas WHERE jogador_id = $1', [id])
     receitas = parseInt(receitas.rows[0].sum)
     if (isNaN(receitas)) { receitas = 0 }
 
-    let despesas = await pool.query('SELECT COALESCE(SUM(valor), 0) FROM despesas WHERE jogador_id = $1', [id])
+    let despesas = await pool.query('SELECT COALESCE(SUM(valor), 0) as sum FROM despesas WHERE jogador_id = $1', [id])
     despesas = parseInt(despesas.rows[0].sum)
     if (isNaN(despesas)) { despesas = 0 }
 
