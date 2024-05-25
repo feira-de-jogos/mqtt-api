@@ -6,7 +6,7 @@ Para rodar o banco de dados relacional, é necessário criar o arquivo `.env` co
 
 Exemplo:
 
-```
+```ini
 POSTGRES_PASSWORD=<feira>
 ```
 

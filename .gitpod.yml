@@ -1,7 +1,0 @@
-tasks:
-  - name: servidor
-    init: npm install --include-dev
-
-vscode:
-  extensions:
-    - dbaeumer.vscode-eslint
